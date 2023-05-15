@@ -12,7 +12,7 @@ const productSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: [true, "Please provide a price for each product."],
-      min: [0, "Please provide a value greater than $0.00"],
+      min: [0.01, "Please provide a price value greater than $0.00"],
       // match: [cashRegEx, "Ensure your price"]
     },
     description: {

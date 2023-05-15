@@ -1,13 +1,24 @@
 const Product = require("../models/product.model");
 
-module.exports.findAllProducts = (request, response) => {
+module.exports.findAllProducts = (_request, response) => {
   Product.find()
     .then((allProducts) => {
       console.log({ results: allProducts });
-      response.json({ results: allProducts });
+      response.status(200).json({ results: allProducts });
     })
     .catch((error) => {
-      response.json({ message: "Something went wrong...", error });
+      response.status(400).json(error);
+    });
+};
+
+module.exports.findOneProduct = (request, response) => {
+  Product.findOne({ _id: request.params.id })
+    .then((product) => {
+      console.log({ results: product });
+      response.status(200).json({ results: product });
+    })
+    .catch((error) => {
+      response.status(400).json(error);
     });
 };
 
@@ -20,9 +31,9 @@ module.exports.createNewProduct = (request, response) => {
   })
     .then((newProduct) => {
       console.log({ results: newProduct });
-      response.json({ results: newProduct });
+      response.status(200).json({ results: newProduct });
     })
     .catch((error) => {
-      response.json({ message: "Something went wrong...", error });
+      response.status(400).json(error);
     });
 };

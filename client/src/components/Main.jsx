@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Routes, Route, Link } from "react-router-dom";
 import axios from "axios";
 import Form from "./Form";
 
@@ -21,7 +22,7 @@ const Main = (props) => {
     <div>
       <Form products={products} setProducts={setProducts} />
 
-      <div className="card">
+      <div className="card mb-3">
         <div className="card-header text-center">
           <h2>All Products</h2>
         </div>
@@ -31,7 +32,11 @@ const Main = (props) => {
               return (
                 <li key={product._id}>
                   {/* {JSON.stringify(product)} */}
-                  <h3>{product.name}</h3>
+                  <h3>
+                    <Link to={`/api/products/${product._id}`}>
+                      {product.name}
+                    </Link>
+                  </h3>
                   <p>
                     <span className="fw-bold">Price: </span>${product.price}
                   </p>

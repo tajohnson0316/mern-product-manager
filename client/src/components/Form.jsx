@@ -8,6 +8,8 @@ const Form = (props) => {
   const [productPrice, setProductPrice] = useState(0);
   const [productDescription, setProductDescription] = useState("");
 
+  const [errors, setErrors] = useState([]);
+
   const createProduct = (e) => {
     e.preventDefault();
 
@@ -25,17 +27,34 @@ const Form = (props) => {
       })
       .catch((error) => {
         console.log("❌ERROR IN SERVER RESPONSE =>", error);
+        const errorResponse = error.response.data.errors; // Get the errors from error.response.data
+        const errorArr = []; // Define a temp error array to push the messages in
+        for (const key of Object.keys(errorResponse)) {
+          // Loop through all errors and get the messages
+          errorArr.push(errorResponse[key].message);
+        }
+        // Set Errors
+        setErrors(errorArr);
       });
+
+    setProductName("");
+    setProductPrice(0);
+    setProductDescription("");
   };
 
   return (
     <fieldset>
-      <div className="card">
+      <div className="card mb-3">
         <div className="card-header text-center">
           <h2>Submit New Product</h2>
         </div>
         <div className="card-body">
           <form onSubmit={createProduct}>
+            <div className="text-danger fw-bold">
+              {errors.map((err, index) => (
+                <p key={index}>{err}</p>
+              ))}
+            </div>
             <div className="mb-3">
               <label htmlFor="productName" className="form-label">
                 Product Name:
