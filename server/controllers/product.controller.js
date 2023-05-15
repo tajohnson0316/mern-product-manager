@@ -37,3 +37,23 @@ module.exports.createNewProduct = (request, response) => {
       response.status(400).json(error);
     });
 };
+
+module.exports.updateOneProduct = (request, response) => {
+  Product.updateOne({ _id: request.params.id }, request.body, {
+    new: true,
+    runValidators: true,
+  })
+    .then((product) => {
+      console.log({ results: product });
+      response.status(200).json({ results: product });
+    })
+    .catch((error) => {
+      response.status(400).json(error);
+    });
+};
+
+module.exports.deleteOneProduct = (request, response) => {
+  Product.deleteOne({ _id: request.params.id })
+    .then((deleteConfirmation) => response.status(200).json(deleteConfirmation))
+    .catch((error) => response.status(400).json(error));
+};

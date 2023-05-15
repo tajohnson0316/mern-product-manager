@@ -4,7 +4,7 @@ import axios from "axios";
 import Form from "./Form";
 
 const Main = (props) => {
-  const { products, setProducts } = props;
+  const { products, setProducts, removeFromDom } = props;
 
   useEffect(() => {
     axios
@@ -16,7 +16,19 @@ const Main = (props) => {
       .catch((error) => {
         console.log("❌ERROR IN SERVER RESPONSE =>", error);
       });
-  }, []);
+  }, [setProducts]);
+
+  const deleteProduct = (productID) => {
+    axios
+      .delete(`http://localhost:8001/api/products/${productID}`)
+      .then((response) => {
+        console.log(response.data);
+        removeFromDom(productID);
+      })
+      .catch((error) => {
+        console.log("❌ERROR IN SERVER RESPONSE =>", error);
+      });
+  };
 
   return (
     <div>
@@ -30,7 +42,7 @@ const Main = (props) => {
           <ul>
             {products.map((product) => {
               return (
-                <li key={product._id}>
+                <li className="mb-3" key={product._id}>
                   {/* {JSON.stringify(product)} */}
                   <h3>
                     <Link to={`/api/products/${product._id}`}>
@@ -44,6 +56,24 @@ const Main = (props) => {
                     <span className="fw-bold">Description: </span>
                     {product.description}
                   </p>
+                  <div className="d-flex justify-content-start gap-3">
+                    <Link
+                      className="text-success"
+                      to={`/api/products/edit/${product._id}`}
+                    >
+                      EDIT PRODUCT
+                    </Link>
+                    <span> | </span>
+                    <Link
+                      to={"/"}
+                      className="text-danger"
+                      onClick={(e) => {
+                        deleteProduct(product._id);
+                      }}
+                    >
+                      DELETE PRODUCT
+                    </Link>
+                  </div>
                 </li>
               );
             })}
